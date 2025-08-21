@@ -19,7 +19,7 @@ def get_mask_card_number(card_number: str | int) -> str:
     return masked
 
 
-def get_mask_account(account_number: int) -> str:
+def get_mask_account(account_number: str | int) -> str:
     """
     Маскирует номер счёта (число) в формате **XXXX.
     Показывает только последние 4 цифры, перед ними — две звёздочки.
