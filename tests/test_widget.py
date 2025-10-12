@@ -7,6 +7,10 @@ def test_get_date() -> None:
     with pytest.raises(TypeError):
         get_date(123)
 
+def test_get_date_type_error() -> None:
+    with pytest.raises(TypeError):
+        get_date(123)
+
 
 @pytest.mark.parametrize(
     "number, expected",
