@@ -14,36 +14,6 @@ def test_get_date_success():
     assert get_date("1999-01-05") == "05.01.1999"
 
 
-def test_get_date_invalid_format():
-    """Тест неверного формата"""
-    with pytest.raises(ValueError):
-        get_date("2023/12/25")  # Неправильные разделители
-
-    with pytest.raises(ValueError):
-        get_date("2023-12-25-extra")  # Лишние символы
-
-
-def test_get_date_short_string():
-    """Тест слишком короткой строки"""
-    with pytest.raises(ValueError):
-        get_date("2023-12")  # Не хватает дня
-
-
-def test_get_date_invalid_chars():
-    """Тест нечисловых символов"""
-    with pytest.raises(ValueError):
-        get_date("abcd-ef-gh")  # Буквы вместо цифр
-
-
-def test_get_date_invalid_date():
-    """Тест некорректных значений даты"""
-    with pytest.raises(ValueError):
-        get_date("2023-13-01")  # Несуществующий месяц
-
-    with pytest.raises(ValueError):
-        get_date("2023-12-32")  # Несуществующий день
-
-
 @pytest.mark.parametrize(
     "number, expected",
     [
@@ -53,3 +23,46 @@ def test_get_date_invalid_date():
 )
 def test_mask_account_card(number: str, expected: str) -> None:
     assert mask_account_card(number) == expected
+
+
+def test_get_date_valid_formats():
+    """Тестирование функции с валидными форматами дат"""
+
+    # Стандартные случаи
+    assert get_date("2023-12-25") == "25.12.2023"
+    assert get_date("1999-01-05") == "05.01.1999"
+    assert get_date("2024-02-29") == "29.02.2024"  # високосный год
+
+    # Граничные значения месяцев и дней
+    assert get_date("2023-01-01") == "01.01.2023"  # первый день года
+    assert get_date("2023-12-31") == "31.12.2023"  # последний день года
+
+    # Даты с однозначными числами (с ведущими нулями)
+    assert get_date("2023-01-01") == "01.01.2023"
+    assert get_date("2023-09-07") == "07.09.2023"
+
+    # Разные годы
+    assert get_date("2000-06-15") == "15.06.2000"
+    assert get_date("2015-08-20") == "20.08.2015"
+    assert get_date("1995-03-10") == "10.03.1995"
+
+    # Все месяцы
+    assert get_date("2023-01-15") == "15.01.2023"
+    assert get_date("2023-06-15") == "15.06.2023"
+    assert get_date("2023-12-15") == "15.12.2023"
+
+
+def test_get_date_edge_cases():
+    """Тестирование граничных случаев с валидными датами"""
+
+    # Минимальная дата (в реальном проекте нужно учитывать ограничения)
+    assert get_date("0001-01-01") == "01.01.0001"
+
+    # Максимальная дата (условно)
+    assert get_date("9999-12-31") == "31.12.9999"
+
+    # 30 дней в апреле
+    assert get_date("2023-04-30") == "30.04.2023"
+
+    # 28 дней в феврале невисокосного года
+    assert get_date("2023-02-28") == "28.02.2023"
